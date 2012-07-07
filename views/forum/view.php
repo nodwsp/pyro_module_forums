@@ -36,8 +36,16 @@
                 <strong><?php echo anchor('forums/topics/view/'.$topic->id, $topic->title);?></strong><br/>
                <span class="description">Author : 
                     <?php
-                    $this->load->model('users/users_m');
-                    echo $this->users_m->get(array('id' => $topic->author_id))->full_name;
+
+
+
+
+   //                    $this->load->model('users/users_m');
+//                    echo $this->users_m->get(array('id' => $topic->author_id))->full_name;
+
+
+
+
                     ?>
                </span>
             </td>

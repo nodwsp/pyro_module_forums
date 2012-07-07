@@ -95,7 +95,7 @@
     <br clear="both" />
 </div>
 
-   <?php if ($this->user->group == 'site-administrator' || $this->user->group == 'admin' ): ?>
+   <?php if ($this->current_user->group == 'site-administrator' || $this->current_user->group == 'admin' ): ?>
             <br/><br/>   
             <hr style="color:#ccc;padding:5px 0px; margin:0 10px; width:200px;"/>
             <a style="color:#69A2CD; padding-left:10px;" href="<?php echo site_url("admin/posts/edit/$post->id") ?>" >Edit this post</a>
