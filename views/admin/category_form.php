@@ -7,27 +7,19 @@
 </section>
 
 <section class="item">
-  <div class="box">
-    <div class="box-container">
+  <fieldset>
+    <?php echo form_open($this->uri->uri_string(), 'class="crud"', array('id' => $category->id)); ?>
+    <ul>
       
-      <?php echo form_open($this->uri->uri_string(), 'class="crud"', array('id' => $category->id)); ?>
+      <li>
+        <label for="title"><?php echo lang('forums_title_label');?> <span class="required-icon tooltip"><?php echo lang('required_label');?></span></label>
+        <?php echo form_input('title', $category->title, 'maxlength="100"'); ?>
+      </li>
       
-      <ol>
-	
-        <li>
-          <label for="title"><?php echo lang('forums_title_label');?></label>
-          <?php echo form_input('title', $category->title, 'maxlength="100"'); ?>
-          <span class="required-icon tooltip"><?php echo lang('required_label');?></span>
-        </li>
-	
-      </ol>
-      
-      
-      <div class="buttons">
-        <?php $this->load->view('admin/partials/buttons', array('buttons' =>array('save','cancel') )); ?>
-      </div>
-      <?php echo form_close(); ?>
-      
-    </div>
+    </ul>
+  </fieldset>
+  <div class="buttons">
+    <?php $this->load->view('admin/partials/buttons', array('buttons' => array('save', 'cancel') )); ?>
   </div>
+  <?php echo form_close(); ?>
 </section>

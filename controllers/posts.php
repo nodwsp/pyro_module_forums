@@ -42,20 +42,16 @@ class Posts extends Public_Controller {
     $this->load->config('forums');
     $this->lang->load('forums');
 
-    if(!$this->settings->item('forums_editor'))
-      {
-	$this->forums_m->add_setting();
-      }
-
-    $this->load->helper($this->settings->item('forums_editor'));
+    $this->load->helper(Settings::get('forums_editor'));
 
     // Template settings
     $this->template->enable_parser_body(FALSE);
 
     //$this->template->set_module_layout('default');
 
-    $this->template->append_metadata(theme_css('forums.css'))
-      ->append_metadata(js('forums.js', 'forums'));
+    $this->template
+      ->append_css('module::forums.css')
+      ->append_js('module::forums.js', 'forums');
 
     $this->template->set_breadcrumb('Home', '/')
       ->set_breadcrumb('Forums', 'forums');
@@ -149,11 +145,11 @@ class Posts extends Public_Controller {
       {
 	$quote = unserialize($this->session->flashdata('forum_quote'));
 
-	if($this->settings->item('forums_editor') == 'bbcode')
+	if(Settings::get('forums_editor') == 'bbcode')
 	  {
 	    $reply->content = '[quote]'.$quote->content.'[/quote]';
 	  }
-	elseif($this->settings->item('forums_editor') == 'textile')
+	elseif(Settings::get('forums_editor') == 'textile')
 	  {
 	    $reply->content = 'bq..  '.$quote->content . "\n\n";
 	  }

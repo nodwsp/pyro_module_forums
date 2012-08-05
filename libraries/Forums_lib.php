@@ -5,24 +5,25 @@
  *
  * @author Dan Horrigan
  */
+
 class Forums_lib
 {
   private $CI;
-
+  
   public function  __construct()
   {
     $this->CI =& get_instance();
   }
-
+  
   public function notify_reply($recipients, $reply)
   {
     $this->CI->load->library('email');
     $this->CI->load->helper('url');
-
+    
     foreach($recipients as $person)
       {
 	// No need to email the user that entered the reply
-	if($person->email == $this->CI->user->email)
+	if($person->email == $this->CI->current_user->email)
 	  {
 	    continue;
 	  }
@@ -31,7 +32,7 @@ class Forums_lib
 	$text_body .= parse($reply->content);
 
 	$this->CI->email->clear();
-	$this->CI->email->from($this->CI->settings->item('server_email'), $this->CI->config->item('forums_title'));
+	$this->CI->email->from($this->CI->settings->get('server_email'), $this->CI->config->item('forums_title'));
 	$this->CI->email->to($person->email);
 
 	$this->CI->email->subject('Subscription Notification: ' . $reply->title);

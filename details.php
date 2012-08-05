@@ -1,39 +1,36 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
-class Module_Forums extends Module {
+class Module_Forums extends Module
+{
+  public $version = '1.0';
 
-    public $version = '1.0';
-
-    public function info() {
-      return array(
-		   'name'      	=> array(
+  public function info()
+  {
+    return array(
+		 'name'      	=> array(
 					 'en' => 'Forums',
 					 ),
-		   'description' => array(
-					  'en' => 'The forum for your site',
-					  ),
+		 'description' => array(
+					'en' => 'The forum for your site',
+					),
 
-		   'frontend'	=> TRUE,
-		   'backend'	=> TRUE,
-		   'menu'	=> 'content',
+		 'frontend'	=> TRUE,
+		 'backend'	=> TRUE,
+		 'menu'	=> 'content',
 
-		   'sections'	=> array(
+		 'sections'	=> array(
 					 'admin' => array(
 							  'name' => 'forums_forum_label',
 							  'uri' => 'admin/forums',
 							  'shortcuts'	=> array(
 										 
 										 array('name'	=> 'forums_category_title',
-										       'uri'	=> 'admin/forums',
+										       'uri'	=> 'admin/forums/list_categories',
 										       'class'	=> 'list'),
 
 										 array('name'	=> 'forums_create_category_title',
 										       'uri'	=> 'admin/forums/create_category',
 										       'class'	=> 'add'),
-
-										 array('name'	=> 'forums_list_forum_title',
-										       'uri'	=> 'admin/forums/list_forums',
-										       'class'	=> 'list'),
 
 										 array('name'	=> 'forums_create_forum_title',
 										       'uri'	=> 'admin/forums/create_forum',
@@ -43,16 +40,17 @@ class Module_Forums extends Module {
 							  
 							  ),
 					 ),
-		   );
-    }
+		 );
+  }
 
-    public function install() {
-      $this->dbforge->drop_table('forum_categories');
-      $this->dbforge->drop_table('forum_posts');
-      $this->dbforge->drop_table('forum_subscriptions');
-      $this->dbforge->drop_table('forums');
+  public function install()
+  {
+    $this->dbforge->drop_table('forum_categories');
+    $this->dbforge->drop_table('forum_posts');
+    $this->dbforge->drop_table('forum_subscriptions');
+    $this->dbforge->drop_table('forums');
       
-      $categories = "
+    $categories = "
                 CREATE TABLE IF NOT EXISTS ".$this->db->dbprefix('forum_categories')." (
                 `id` int(11) NOT NULL AUTO_INCREMENT,
                 `title` varchar(100) NOT NULL DEFAULT '',
@@ -60,7 +58,7 @@ class Module_Forums extends Module {
                 PRIMARY KEY (`id`)
                 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Splits forums into categories' " ;
       
-      $posts = "
+    $posts = "
                 CREATE TABLE IF NOT EXISTS ".$this->db->dbprefix('forum_posts')." (
                 `id` int(11) NOT NULL AUTO_INCREMENT,
                 `forum_id` int(11) NOT NULL DEFAULT '0',
@@ -78,7 +76,7 @@ class Module_Forums extends Module {
                 PRIMARY KEY (`id`)
                 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ";
       
-      $subscriptions = "
+    $subscriptions = "
                 CREATE TABLE IF NOT EXISTS ".$this->db->dbprefix('forum_subscriptions')." (
                 `id` int(11) NOT NULL AUTO_INCREMENT,
                 `topic_id` int(11) NOT NULL DEFAULT '0',
@@ -86,7 +84,7 @@ class Module_Forums extends Module {
                 PRIMARY KEY (`id`)
                 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ";
       
-      $forums = "
+    $forums = "
                 CREATE TABLE IF NOT EXISTS ".$this->db->dbprefix('forums')." (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `title` varchar(100) NOT NULL DEFAULT '',
@@ -95,30 +93,47 @@ class Module_Forums extends Module {
 		  `permission` int(2) NOT NULL DEFAULT '0',
 		  PRIMARY KEY (`id`)
 		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='Forums are the containers for threads and topics.' ";
-      
-      
-      return $this->db->query($categories)
-	&& $this->db->query($posts)
-	&& $this->db->query($subscriptions)
-	&& $this->db->query($forums);
-    }
 
-    public function uninstall() {
-      return $this->dbforge->drop_table('forum_categories')
-	&& $this->dbforge->drop_table('forum_posts')
-	&& $this->dbforge->drop_table('forum_subscriptions')
-	&& $this->dbforge->drop_table('forums');
-    }
+    $setting = array(
+		     'slug'			=> 'forums_editor',
+		     'title'			=> 'Forum Editor',
+		     'description'	=> 'Which editor should the forums use?',
+		     'type'			=> 'select',
+		     '`default`'		=> 'bbcode',
+		     '`value`'		=> 'bbcode',
+		     'options'		=> 'bbcode=BBCode|textile=Textile',
+		     'is_required'	=> 1,
+		     'is_gui'		=> 1,
+		     'module'		=> 'forums'
+		     );
+  
+    return $this->db->query($categories)
+      && $this->db->query($posts)
+      && $this->db->query($subscriptions)
+      && $this->db->query($forums)
+      && $this->db->insert('settings', $setting);
+  }
 
-    public function upgrade($old_version) {
-      // Your Upgrade Logic
-      return TRUE;
-    }
+  public function uninstall()
+  {
+    return $this->dbforge->drop_table('forum_categories')
+      && $this->dbforge->drop_table('forum_posts')
+      && $this->dbforge->drop_table('forum_subscriptions')
+      && $this->dbforge->drop_table('forums')
+      && $this->db->delete('settings', array('module' => 'forums'));
+  }
 
-    public function help() {
-      // Return a string containing help info
-      // You could include a file and return it here.
-      return TRUE;
-    }
+  public function upgrade($old_version)
+  {
+    // Your Upgrade Logic
+    return TRUE;
+  }
+
+  public function help()
+  {
+    // Return a string containing help info
+    // You could include a file and return it here.
+    return TRUE;
+  }
 }
 /* End of file details.php */

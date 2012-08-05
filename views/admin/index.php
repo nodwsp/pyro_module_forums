@@ -1,14 +1,12 @@
 <section class="title">
-    <h4><?php echo lang('forums_list_categories_title');?></h4>
+  <h4><?php echo lang('forums_list_categories_title');?></h4>
 </section>
 
 <section class="item">
   <?php echo form_open('admin/forums');?>
   <div class="box">
     <div class="box-container">
-      
       <?php if (!empty($categories)): ?>
-   
       <table border="0" class="table-list">
         <thead>
           <tr>
@@ -30,21 +28,18 @@
             <td><?php echo form_checkbox('action_to[]', $cat->id);?></td>
             <td><?php echo $cat->title;?></td>
             <td>
-              <?php echo anchor('admin/forums/edit_category/' . $cat->id, lang('forums_edit_label'));?> |
-              <?php echo anchor('admin/forums/delete/category/' . $cat->id, lang('forums_delete_label'), array('class'=>'confirm')); ?>
+              <?php echo anchor('admin/forums/edit_category/' . $cat->id, lang('forums_edit_label'), array('class' => 'btn orange'));?>
+              <?php echo anchor('admin/forums/delete/category/' . $cat->id, lang('forums_delete_label'), array('class'=>'confirm btn red')); ?>
             </td>
           </tr>
           <?php endforeach; ?>
         </tbody>
       </table>
-      
       <?php //$this->load->view('admin/partials/buttons', array('buttons' => array('delete') )); ?>
-      
       <?php else: ?>
-      <p><?php echo lang('forums_no_categories');?></p>
+      <div class="no_data"><?php echo lang('forums_no_categories');?></div>
       <?php endif; ?>
     </div>
   </div>
-  
   <?php echo form_close();?>
 </section>

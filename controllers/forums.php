@@ -8,19 +8,14 @@ class Forums extends Public_Controller {
     $this->load->model('forums_m');
     $this->load->model('forum_categories_m');
     $this->load->model('forum_posts_m');
-
+    $this->load->model('users/user_m');
     $this->lang->load('forums');
     $this->load->config('forums');
 
-    if(!$this->settings->item('forums_editor'))
-      {
-	$this->forums_m->add_setting();
-      }
-
     $this->template->enable_parser_body(FALSE);
 
-    //$this->template->set_module_layout('default');
-    $this->template->append_metadata( css('forums.css','forums') );
+    $this->template->set_layout('default.html');
+    $this->template->append_css('module::forums.css');
 
     $this->template->set_breadcrumb('Home', '/');
   }
@@ -74,11 +69,15 @@ class Forums extends Public_Controller {
     // Get all topics for this forum
     $forum->topics = $this->forum_posts_m->get_topics_by_forum($forum_id, $offset, $per_page);
 		
+
     // Get a list of posts which have no parents (topics) in this forum
     foreach($forum->topics as &$topic)
       {
 	$topic->post_count = $this->forum_posts_m->count_posts_in_topic($topic->id);
 	$topic->last_post = $this->forum_posts_m->last_topic_post($topic->id);
+
+	$author = $this->user_m->get(array('id' => $topic->author_id));
+	$topic->author->display_name = $author->display_name;
 
 	if(!empty($topic->last_post))
 	  {

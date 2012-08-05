@@ -10,7 +10,7 @@
 <div class="preview">
     <h4>Post Preview</h4>
     <h5><?php echo $topic->title;?></h5>
-    <p><?php echo parse( htmlentities($reply->content), 0, TRUE );?></p>
+    <p><?php echo parse( htmlentities($reply->content), 0, FALSE );?></p>
 </div>
 <?php endif; ?>
 

@@ -66,12 +66,24 @@ class Admin extends Admin_Controller {
     $this->load->model('forum_categories_m');
     $this->lang->load('forums');
 
-    if(!$this->settings->item('forums_editor')) {
-      $this->forums_m->add_setting();
-    }
-
     $this->template
       ->set_partial('shortcuts', 'admin/partials/shortcuts');
+  }
+
+  /**
+   * List Forums
+   *
+   * Lists all the forums.
+   *
+   * @access	public
+   * @return	void
+   */
+  public function list_categories() {
+    $categories = $this->forum_categories_m->get_all();
+
+    $this->data->categories = &$categories;
+
+    $this->template->build('admin/index', $this->data);
   }
 
   /**
@@ -83,22 +95,6 @@ class Admin extends Admin_Controller {
    * @return	void
    */
   public function index() {
-    $categories = $this->forum_categories_m->get_all();
-
-    $this->data->categories = &$categories;
-
-    $this->template->build('admin/index', $this->data);
-  }
-
-  /**
-   * List Forums
-   *
-   * Lists all the forums.
-   *
-   * @access	public
-   * @return	void
-   */
-  public function list_forums() {
     $this->db->select('forums.id, forums.title, forum_categories.title as category');
     $this->db->join('forum_categories', 'forums.category_id = forum_categories.id');
     $this->db->order_by('category', 'ASC');

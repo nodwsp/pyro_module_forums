@@ -32,8 +32,8 @@
             <td><?php echo $forum->category;?></td>
             <td><?php echo $forum->title;?></td>
             <td>
-              <?php echo anchor('admin/forums/edit_forum/' . $forum->id, lang('forums_edit_label'));?> |
-              <?php echo anchor('admin/forums/delete/forum/' . $forum->id, lang('forums_delete_label'), array('class'=>'confirm')); ?>
+ <?php echo anchor('admin/forums/edit_forum/' . $forum->id, lang('forums_edit_label'), array('class' => 'btn orange'));?>
+              <?php echo anchor('admin/forums/delete/forum/' . $forum->id, lang('forums_delete_label'), array('class'=>'btn red confirm')); ?>
             </td>
           </tr>
           <?php endforeach; ?>

@@ -29,24 +29,13 @@
             <?php foreach($forum->topics as $topic): ?>
         <tr>
             <td class="forum_icon">
-                        <?php echo $topic->sticky ? image('pin.png', 'forums') : image('folder.png', 'forums'); ?>
+                        <?php echo $topic->sticky ? img('module::pin.png') : img('folder.png', 'forums'); ?>
             </td>
             <td valign="top">
                         <?php echo $topic->sticky ? '<span class="sticky">Sticky: </span>' : ''; ?>
                 <strong><?php echo anchor('forums/topics/view/'.$topic->id, $topic->title);?></strong><br/>
                <span class="description">Author : 
-                    <?php
-
-
-
-
-   //                    $this->load->model('users/users_m');
-//                    echo $this->users_m->get(array('id' => $topic->author_id))->full_name;
-
-
-
-
-                    ?>
+		<?php echo $topic->author->display_name; ?>
                </span>
             </td>
             <td class="center_col"><?php echo $topic->post_count;?></td>

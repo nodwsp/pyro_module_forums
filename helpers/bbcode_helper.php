@@ -37,42 +37,42 @@
 */
 function parse($str, $clear = 0, $parse_smileys = FALSE)
 {
-	$bbcode_to_parse = _get_bbcode_to_parse_array();
-	if (FALSE === ($bbcode_to_parse))
-	{
-		return FALSE;
-	}
- 
-	foreach ($bbcode_to_parse as $key => $val)
+  $bbcode_to_parse = _get_bbcode_to_parse_array();
+  if (FALSE === ($bbcode_to_parse))
     {
-        for ($i = 1; $i <= $bbcode_to_parse[$key][2]; $i++) // loop for imbricated tags
+      return FALSE;
+    }
+ 
+  foreach ($bbcode_to_parse as $key => $val)
+    {
+      for ($i = 1; $i <= $bbcode_to_parse[$key][2]; $i++) // loop for imbricated tags
         {
-            $str = preg_replace($key, $bbcode_to_parse[$key][$clear], $str);
+	  $str = preg_replace($key, $bbcode_to_parse[$key][$clear], $str);
         }
     }
 
-	$str = break_lines($str);
-    if($parse_smileys)
+  $str = break_lines($str);
+  if($parse_smileys)
+    {
+      // All this funky code applys smileys to anything OUTSIDE code blocks
+      preg_match_all('/<code>.*?<\/code>/s', $str, $code_blocks, PREG_PATTERN_ORDER);
+      $block_num = 0;
+      foreach ($code_blocks[0] as $block)
 	{
-		// All this funky code applys smileys to anything OUTSIDE code blocks
-		preg_match_all('/<code>.*?<\/code>/s', $str, $code_blocks, PREG_PATTERN_ORDER);
-		$block_num = 0;
-		foreach ($code_blocks[0] as $block)
-		{
-			$str = str_replace($block, "{block_$block_num}", $str);
-			$block_num++;
-		}
-		$str = parse_smileys($str, image_url("smileys/"));
-
-		$block_num = 0;
-		foreach ($code_blocks[0] as $block)
-		{
-			$str = str_replace("{block_$block_num}", $block, $str);
-			$block_num++;
-		}
+	  $str = str_replace($block, "{block_$block_num}", $str);
+	  $block_num++;
 	}
-	$str = preg_replace ( '/<code>*\s*/s', '<code>', $str);
-    return preg_replace ( '/\s*<\/code>/s', '</code>', $str);
+      $str = parse_smileys($str, image_url("smileys/"));
+
+      $block_num = 0;
+      foreach ($code_blocks[0] as $block)
+	{
+	  $str = str_replace("{block_$block_num}", $block, $str);
+	  $block_num++;
+	}
+    }
+  $str = preg_replace ( '/<code>*\s*/s', '<code>', $str);
+  return preg_replace ( '/\s*<\/code>/s', '</code>', $str);
 }
 
 // ------------------------------------------------------------------------
@@ -141,18 +141,17 @@ function get_buttons($bbcode = NULL)
 {
     if ( ! is_array($bbcode))
     {
-		$bbcode = _get_bbcode_array();
-        if (FALSE === ($bbcode))
+      $bbcode = _get_bbcode_array();
+      if (FALSE === ($bbcode))
         {
-            return FALSE;
+	  return FALSE;
         }
     }
 
     foreach ($bbcode as $key => $val)
-    {
+      {
         $button[] = '<a href="#" id="'.$key.'" onclick="'.$val.'">' . $key . '</a>';
-    }
-
+      }
     return $button;
 }
 
@@ -168,14 +167,12 @@ function get_buttons($bbcode = NULL)
 */
 function _get_bbcode_array()
 {
-	$CI =& get_instance();
-    if ( ! $CI->load->config('bbcode', TRUE))
+  $CI =& get_instance();
+  if ( ! $CI->load->config('bbcode', TRUE))
     {
-        return FALSE;
+      return FALSE;
     }
-
-
-    return $CI->config->item('bbcodes', 'bbcode');
+  return $CI->config->item('bbcodes', 'bbcode');
 }
 
 // ------------------------------------------------------------------------

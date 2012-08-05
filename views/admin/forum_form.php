@@ -7,43 +7,45 @@
 </section>
 
 <section class="item">
-  <div class="box">
-    <div class="box-container">
-      <?php
-         if(empty($forum->categories)):
-      echo lang('forums_no_categories');
-      else:
-      ?>
+  <fieldset>
+    <?php
+       if(empty($forum->categories)):
+    echo lang('forums_no_categories');
+    else:
+    ?>
       
-      <?php echo form_open($this->uri->uri_string(), 'class="crud"', array('id' => $forum->id)); ?>
+    <?php echo form_open($this->uri->uri_string(), 'class="crud"', array('id' => $forum->id)); ?>
       
-      <ol>
-        <li>
-          <label for="category"><?php echo lang('forums_category_label');?></label>
-          <?php echo form_dropdown('category', $forum->categories, $forum->category); ?>
-        </li>
+    <ul>
 	
-        <li>
-          <label for="title"><?php echo lang('forums_title_label');?></label>
+      <li>
+        <label for="title"><?php echo lang('forums_title_label');?> <span class="required-icon tooltip"><?php echo lang('required_label');?></span></label>
+	<div class="input">
           <?php echo form_input('title', $forum->title, 'maxlength="100"'); ?>
-          <span class="required-icon tooltip"><?php echo lang('required_label');?></span>
-        </li>
+	</div>
+      </li>
 	
-        <li>
-          <label for="description"><?php echo lang('forums_description_label');?></label>
+      <li>
+        <label for="description"><?php echo lang('forums_description_label');?> <span class="required-icon tooltip"><?php echo lang('required_label');?></span></label>
+	<div class="input">
           <?php echo form_input('description', $forum->description, 'maxlength="255"'); ?>
-          <span class="required-icon tooltip"><?php echo lang('required_label');?></span>
-        </li>
+	</div>
+      </li>
 	
-      </ol>
-      <div class="buttons">
-        <?php $this->load->view('admin/partials/buttons', array('buttons' => array('save', 'cancel') )); ?>
-      </div>
-      <?php
-         echo form_close();
-         endif;
-         ?>
-      
-    </div>
+      <li>
+        <label for="category"><?php echo lang('forums_category_label');?></label>
+	<div class="input">
+          <?php echo form_dropdown('category', $forum->categories, $forum->category); ?>
+	</div>
+      </li>
+
+    </ul>
+  </fieldset>
+  <div class="buttons">
+    <?php $this->load->view('admin/partials/buttons', array('buttons' => array('save', 'cancel') )); ?>
   </div>
+  <?php
+     echo form_close();
+     endif;
+     ?> 
 </section>
