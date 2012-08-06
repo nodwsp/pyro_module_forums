@@ -9,9 +9,11 @@ class Module_Forums extends Module
     return array(
 		 'name'      	=> array(
 					 'en' => 'Forums',
+					 'fr' => 'Forums',
 					 ),
 		 'description' => array(
 					'en' => 'The forum for your site',
+					'fr' => 'Un forum pour votre site.',
 					),
 
 		 'frontend'	=> TRUE,
